@@ -1,413 +1,478 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Github, Linkedin, Mail, Phone, Download, Globe, Menu, X, Star, Quote, ArrowRight, ArrowUpCircle, Code, CheckCircle, ExternalLink, Send, Sun, Moon } from 'lucide-react';
+import { ChevronDown, Github, Linkedin, Mail, Phone, Download, Globe, Menu, X, Star, Quote, ArrowRight, ArrowUpCircle, Code, CheckCircle, ExternalLink, Send, Sun, Moon } from 'lucide-react';  // Added ArrowUpCircle, Sun, Moon
 
 const translations = {
   en: {
     nav: { home: 'Home', about: 'About', projects: 'Projects', skills: 'Skills', testimonials: 'Testimonials', contact: 'Contact' },
     hero: { name: 'Mahdy Gribkov', title: 'Full Stack Developer', bio: 'A results-driven and multilingual Full Stack Developer with a strong passion for crafting elegant, high-performance web applications. I specialize in leveraging modern JavaScript frameworks and back-end technologies to build scalable, user-centric solutions. My approach blends technical expertise with creative problem-solving, aiming to bridge the gap between innovative ideas and tangible, impactful products.', cta: 'Explore My Work' },
-    about: { title: 'About Me', greeting: "Hello! I'm Mahdy.", bio_p1: "As a Full Stack Developer, I thrive on the challenge of bringing complex digital experiences to life. My journey in tech is fueled by a relentless curiosity and a commitment to continuous learning. I possess strong front-end skills in HTML, CSS, JavaScript, TypeScript, and frameworks like React, complemented by robust back-end proficiency in Node.js and database management with MongoDB.", bio_p2: "My multilingual abilities (English, Arabic, Russian, Hebrew) enhance my collaboration in diverse, global teams, allowing me to bridge communication gaps and foster more inclusive development environments. I'm always eager to take on new challenges and contribute to projects that push the boundaries of technology.", download_cv: 'Download CV' },
-    skills: { title: 'Skills', categories: { frontend: 'Frontend', backend: 'Backend', databases: 'Databases', tools: 'Tools', languages: 'Languages' },
-      frontend_list: ['React', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'],
-      backend_list: ['Node.js', 'Express.js', 'RESTful APIs', 'Authentication (JWT)', 'WebSockets'],
-      databases_list: ['MongoDB', 'SQL (PostgreSQL, MySQL)', 'Mongoose'],
-      tools_list: ['Git', 'GitHub', 'VS Code', 'Webpack', 'Figma (Basic)', 'ESLint', 'NPM/Yarn'],
-      languages_list: ['JavaScript', 'TypeScript', 'Python', 'SQL', 'Bash']
+    about: { title: 'About Me', greeting: "Hello! I'm Mahdy.", bio_p1: 'As a Full Stack Developer, I thrive on the challenge of bringing complex digital experiences to life. My journey in tech is fueled by a relentless curiosity and a commitment to continuous learning. I possess strong front-end skills in HTML, CSS, JavaScript, TypeScript, and frameworks like React, complemented by robust back-end proficiency in Node.js and database management with MongoDB.', bio_p2: 'My multilingual abilities (English, Arabic, Russian, Hebrew) enhance my collaboration in diverse, global teams. I am adept at translating business requirements into technical specifications and delivering projects that not only meet but exceed expectations. My work approach is rooted in agile methodologies, emphasizing clean code, thorough testing, and open communication.', motivation: "My motivation stems from the desire to create meaningful technology that solves real-world problems and provides exceptional user experiences. I'm always excited to tackle new challenges and contribute to innovative projects.", soft_skills_title: 'Key Strengths', soft_skills: ['Problem Solving', 'Adaptability', 'Team Collaboration', 'Effective Communication', 'Attention to Detail', 'Customer Service Focus'] },
+    projects: { title: 'Featured Projects', subtitle: 'A selection of my recent work. More on GitHub.', viewCode: 'View Code', liveDemo: 'Live Demo' },
+    skills: { title: 'Technical Skills', subtitle: 'My core competencies and technologies I excel in.' },
+    trust: { title: 'Technologies & Platforms I Trust' },
+    testimonials: { 
+      title: 'What Collaborators Say', 
+      angel_rattner: {
+        quote: 'I’ve known Mahdy for quite some time, and if I had to sum him up in one phrase, it would be “a true jack of all trades.” He’s someone who picks things up quickly, connects the dots across different areas, and always finds a way to add value — whether it’s with his frontend development skills, sharp business instincts, or natural ease with people. He has a real talent for customer service, always knowing how to communicate clearly and make people feel heard. At the same time, he sees beyond the immediate task and thinks strategically, often spotting opportunities others might miss. Smart, versatile, and people-oriented. He’s someone you want in your corner.',
+        author: 'Angel Rattner',
+        role: 'Software Developer',
+        context: 'Angel managed Mahdy directly'
+      }
     },
-    projects: { title: 'My Projects', view_project: 'View Project', view_code: 'View Code' },
-    testimonials: { title: 'Testimonials', cta: 'Leave a Testimonial' },
-    contact: { title: 'Contact Me', description: 'Have a question or want to work together? Feel free to reach out!', name_label: 'Your Name', email_label: 'Your Email', message_label: 'Your Message', send_message: 'Send Message', success: 'Message sent successfully!', error: 'Failed to send message. Please try again later.', email_info: 'Email us directly at', phone_info: 'Call us at' },
-    footer: { copyright: `© ${new Date().getFullYear()} Mahdy Gribkov. All rights reserved.` }
+    cta: { title: "Let's Connect", subtitle: "Interested in working together or discussing how my skills can benefit your team? I'm always open to new opportunities and challenges.", button: 'Reach Out to Me' },  // Changed CTA button text
+    contact: { title: 'Get In Touch', subtitle: 'Have a question, a project idea, or just want to connect? Feel free to reach out!', form: { name: 'Full Name', email: 'Email Address', message: 'Your Message', submit: 'Send Message', success: "Message sent successfully! I'll get back to you soon.", error: 'Failed to send message. Please try again or use a direct contact method.' }, direct_title: 'Direct Contact Channels', resume_title: 'My Resume', resume_cta: 'Download CV' },
+    footer: { copyright: '© 2024 Mahdy Gribkov. Crafted with passion and code.' },
+    notFound: { title: '404 - Page Not Found', message: "Oops! The page you're looking for doesn't seem to exist.", goHome: 'Go to Homepage' },
+    themeToggle: { light: 'Light Mode', dark: 'Dark Mode' }
+  },
+  ar: {
+    nav: { home: 'الرئيسية', about: 'نبذة عني', projects: 'المشاريع', skills: 'المهارات', testimonials: 'التوصيات', contact: 'اتصل بي' },
+    hero: { name: 'مهدي جريبكوف', title: 'مطور ويب متكامل', bio: 'مطور ويب متكامل متعدد اللغات، أسعى لتحقيق النتائج بشغف كبير لإنشاء تطبيقات ويب أنيقة وعالية الأداء. متخصص في استخدام أطر عمل JavaScript الحديثة وتقنيات الواجهة الخلفية لبناء حلول قابلة للتطوير وموجهة نحو المستخدم. منهجي يجمع بين الخبرة التقنية وحل المشكلات الإبداعي، بهدف سد الفجوة بين الأفكار المبتكرة والمنتجات الملموسة والمؤثرة.', cta: 'استكشف أعمالي' },
+    about: { title: 'نبذة عني', greeting: 'مرحباً! أنا مهدي.', bio_p1: 'كمطور ويب متكامل، أزدهر في مواجهة تحدي تحويل التجارب الرقمية المعقدة إلى واقع. رحلتي في مجال التكنولوجيا تغذيها فضول لا يكل والتزام بالتعلم المستمر. أمتلك مهارات قوية في تطوير الواجهة الأمامية باستخدام HTML، CSS، JavaScript، TypeScript، وأطر عمل مثل React، بالإضافة إلى كفاءة قوية في الواجهة الخلفية باستخدام Node.js وإدارة قواعد البيانات مثل MongoDB.', bio_p2: 'قدراتي متعددة اللغات (الإنجليزية، العربية، الروسية، العبرية) تعزز تعاوني في فرق عالمية متنوعة. أنا بارع في ترجمة متطلبات العمل إلى مواصفات تقنية وتقديم مشاريع لا تلبي التوقعات فحسب، بل تتجاوزها. يعتمد نهج عملي على المنهجيات الرشيقة، مع التركيز على الكود النظيف، الاختبارات الشاملة، والتواصل المفتوح.', motivation: 'ينبع حماسي من الرغبة في إنشاء تكنولوجيا ذات معنى تحل مشاكل العالم الحقيقي وتقدم تجارب مستخدم استثنائية. أنا دائمًا متحمس لمواجهة تحديات جديدة والمساهمة في مشاريع مبتكرة.', soft_skills_title: 'نقاط القوة الرئيسية', soft_skills: ['حل المشكلات', 'القدرة على التكيف', 'التعاون الجماعي', 'التواصل الفعال', 'الاهتمام بالتفاصيل', 'التركيز على خدمة العملاء'] },
+    testimonials: {
+      title: 'ماذا يقول المتعاونون',
+      angel_rattner: {
+        quote: 'أعرف مهدي منذ فترة طويلة، وإذا كان علي أن ألخصه في عبارة واحدة، فستكون شخص متعدد المواهب حقًا. إنه شخص يلتقط الأشياء بسرعة، ويربط النقاط عبر مجالات مختلفة، ويجد دائمًا طريقة لإضافة قيمة - سواء كان ذلك بمهاراته في تطوير الواجهة الأمامية، أو بحدسه التجاري الحاد، أو بسهولة تعامله الطبيعية مع الناس. لديه موهبة حقيقية في خدمة العملاء، ويعرف دائمًا كيف يتواصل بوضوح ويجعل الناس يشعرون بأنهم مسموعون. في الوقت نفسه، يرى ما هو أبعد من المهمة المباشرة ويفكر بشكل استراتيجي، وغالبًا ما يكتشف الفرص التي قد يفوتها الآخرون. ذكي، متعدد الاستخدامات، وموجه نحو الناس. إنه شخص تريده في فريقك.',
+        author: 'انجل راتنر',
+        role: 'مطور برمجيات',
+        context: 'أدار انجل مهدي مباشرة'
+      }
+    },
+    cta: { title: 'لنتواصل', subtitle: 'هل أنت مهتم بالعمل معًا أو بمناقشة كيف يمكن لمهاراتي أن تفيد فريقك؟ أنا دائمًا منفتح على الفرص والتحديات الجديدة.', button: 'تواصل معي' },
+    footer: { copyright: '© 2024 مهدي جريبكوف. صُنع بشغف وكود.' },
+    notFound: { title: '404 - الصفحة غير موجودة', message: 'عفوًا! يبدو أن الصفحة التي تبحث عنها غير موجودة.', goHome: 'اذهب إلى الصفحة الرئيسية' },
+    themeToggle: { light: 'الوضع الفاتح', dark: 'الوضع الداكن' }
   },
   ru: {
     nav: { home: 'Главная', about: 'Обо мне', projects: 'Проекты', skills: 'Навыки', testimonials: 'Отзывы', contact: 'Контакты' },
-    hero: { name: 'Махди Грибков', title: 'Full Stack Разработчик', bio: 'Целеустремленный и многоязычный Full Stack разработчик с сильной страстью к созданию элегантных, высокопроизводительных веб-приложений. Я специализируюсь на использовании современных JavaScript фреймворков и бэкэнд-технологий для создания масштабируемых, ориентированных на пользователя решений. Мой подход сочетает техническую экспертизу с творческим решением проблем, направленный на преодоление разрыва между инновационными идеями и ощутимыми, значимыми продуктами.', cta: 'Посмотреть мои работы' },
-    about: { title: 'Обо мне', greeting: "Привет! Я Махди.", bio_p1: "Как Full Stack разработчик, я преуспеваю в решении задач по воплощению сложных цифровых проектов в жизнь. Мой путь в сфере технологий подпитывается неутомимым любопытством и приверженностью непрерывному обучению. Я обладаю сильными навыками во фронтенде: HTML, CSS, JavaScript, TypeScript, и фреймворками, такими как React, что дополняется глубокими знаниями бэкэнда в Node.js и управлении базами данных с MongoDB.", bio_p2: "Мои многоязычные способности (английский, арабский, русский, иврит) улучшают мое сотрудничество в разнообразных, глобальных командах, позволяя мне преодолевать коммуникационные барьеры и способствовать созданию более инклюзивных сред разработки. Я всегда готов браться за новые задачи и участвовать в проектах, которые расширяют границы технологий.", download_cv: 'Скачать резюме' },
-    skills: { title: 'Навыки', categories: { frontend: 'Фронтенд', backend: 'Бэкэнд', databases: 'Базы данных', tools: 'Инструменты', languages: 'Языки' },
-      frontend_list: ['React', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'],
-      backend_list: ['Node.js', 'Express.js', 'RESTful APIs', 'Аутентификация (JWT)', 'WebSockets'],
-      databases_list: ['MongoDB', 'SQL (PostgreSQL, MySQL)', 'Mongoose'],
-      tools_list: ['Git', 'GitHub', 'VS Code', 'Webpack', 'Figma (Базовый)', 'ESLint', 'NPM/Yarn'],
-      languages_list: ['JavaScript', 'TypeScript', 'Python', 'SQL', 'Bash']
+    hero: { name: 'Махди Грибков', title: 'Full Stack Разработчик', bio: 'Результатоориентированный и многоязычный Full Stack разработчик со страстью к созданию элегантных, высокопроизводительных веб-приложений. Специализируюсь на использовании современных JavaScript фреймворков и бэкенд-технологий для создания масштабируемых, ориентированных на пользователя решений. Мой подход сочетает техническую экспертизу с творческим решением проблем, стремясь преодолеть разрыв между инновационными идеями и ощутимыми, эффективными продуктами.', cta: 'Мои работы' },
+    about: { title: 'Обо мне', greeting: 'Привет! Я Махди.', bio_p1: 'Как Full Stack разработчик, я успешно справляюсь с задачей воплощения сложных цифровых проектов. Мой путь в технологиях подпитывается неутомимым любопытством и стремлением к постоянному обучению. Обладаю сильными навыками фронтенд-разработки (HTML, CSS, JavaScript, TypeScript, React) и бэкенд-разработки (Node.js, MongoDB).', bio_p2: 'Мои многоязычные способности (английский, арабский, русский, иврит) способствуют эффективному сотрудничеству в разнообразных международных командах. Умею переводить бизнес-требования в технические спецификации и реализовывать проекты, превосходящие ожидания. Мой подход к работе основан на гибких методологиях, с акцентом на чистый код, тщательное тестирование и открытое общение.', motivation: 'Моя мотивация — создавать значимые технологии, решающие реальные проблемы и обеспечивающие исключительный пользовательский опыт. Всегда рад новым вызовам и вкладу в инновационные проекты.', soft_skills_title: 'Ключевые качества', soft_skills: ['Решение проблем', 'Адаптивность', 'Командная работа', 'Эффективная коммуникация', 'Внимание к деталям', 'Клиентоориентированность'] },
+    testimonials: {
+      title: 'Что говорят коллеги',
+      angel_rattner: {
+        quote: 'Я знаю Махди довольно давно, и если бы мне пришлось охарактеризовать его одной фразой, это было бы «настоящий мастер на все руки». Он быстро всё схватывает, связывает воедино разные области и всегда находит способ принести пользу — будь то его навыки фронтенд-разработки, острое деловое чутье или естественная легкость в общении с людьми. У него настоящий талант к обслуживанию клиентов, он всегда знает, как четко общаться и дать людям почувствовать себя услышанными. В то же время он видит дальше непосредственной задачи и мыслит стратегически, часто замечая возможности, которые другие могли бы упустить. Умный, разносторонний и ориентированный на людей. Это тот, кого вы хотите видеть в своей команде.',
+        author: 'Анхель Раттнер',
+        role: 'Разработчик программного обеспечения',
+        context: 'Анхель непосредственно руководил Махди'
+      }
     },
-    projects: { title: 'Мои проекты', view_project: 'Посмотреть проект', view_code: 'Посмотреть код' },
-    testimonials: { title: 'Отзывы', cta: 'Оставить отзыв' },
-    contact: { title: 'Свяжитесь со мной', description: 'Есть вопрос или хотите сотрудничать? Не стесняйтесь обращаться!', name_label: 'Ваше имя', email_label: 'Ваш email', message_label: 'Ваше сообщение', send_message: 'Отправить сообщение', success: 'Сообщение успешно отправлено!', error: 'Не удалось отправить сообщение. Пожалуйста, попробуйте позже.', email_info: 'Напишите нам напрямую на', phone_info: 'Позвоните нам по номеру' },
-    footer: { copyright: `© ${new Date().getFullYear()} Махди Грибков. Все права защищены.` }
-  },
-  ar: {
-    nav: { home: 'الرئيسية', about: 'عني', projects: 'المشاريع', skills: 'المهارات', testimonials: 'الشهادات', contact: 'اتصل بي' },
-    hero: { name: 'مهدي غريبكوف', title: 'مطور Full Stack', bio: 'مطور Full Stack طموح ومتعدد اللغات وشغوف ببناء تطبيقات ويب أنيقة وعالية الأداء. أنا متخصص في الاستفادة من أطر عمل JavaScript الحديثة وتقنيات الواجهة الخلفية لبناء حلول قابلة للتطوير وموجهة نحو المستخدم. يمزج نهجي بين الخبرة التقنية وحل المشكلات الإبداعي، بهدف سد الفجوة بين الأفكار المبتكرة والمنتجات الملموسة والمؤثرة.', cta: 'استكشف أعمالي' },
-    about: { title: 'عني', greeting: "مرحباً! أنا مهدي.", bio_p1: "كمطور Full Stack، أستمتع بتحدي إحياء التجارب الرقمية المعقدة. رحلتي في التكنولوجيا مدفوعة بفضول لا يتوقف والتزام بالتعلم المستمر. أمتلك مهارات قوية في الواجهة الأمامية في HTML وCSS وJavaScript وTypeScript وأطر عمل مثل React، تكملها كفاءة قوية في الواجهة الخلفية في Node.js وإدارة قواعد البيانات باستخدام MongoDB.", bio_p2: "تعزز قدراتي متعددة اللغات (الإنجليزية، العربية، الروسية، العبرية) تعاوني في الفرق المتنوعة والعالمية، مما يسمح لي بسد فجوات التواصل وتعزيز بيئات تطوير أكثر شمولاً. أنا حريص دائمًا على مواجهة تحديات جديدة والمساهمة في المشاريع التي تتجاوز حدود التكنولوجيا.", download_cv: 'تنزيل السيرة الذاتية' },
-    skills: { title: 'المهارات', categories: { frontend: 'الواجهة الأمامية', backend: 'الواجهة الخلفية', databases: 'قواعد البيانات', tools: 'الأدوات', languages: 'اللغات' },
-      frontend_list: ['React', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'],
-      backend_list: ['Node.js', 'Express.js', 'RESTful APIs', 'المصادقة (JWT)', 'WebSockets'],
-      databases_list: ['MongoDB', 'SQL (PostgreSQL, MySQL)', 'Mongoose'],
-      tools_list: ['Git', 'GitHub', 'VS Code', 'Webpack', 'Figma (أساسي)', 'ESLint', 'NPM/Yarn'],
-      languages_list: ['JavaScript', 'TypeScript', 'Python', 'SQL', 'Bash']
-    },
-    projects: { title: 'مشاريعي', view_project: 'عرض المشروع', view_code: 'عرض الكود' },
-    testimonials: { title: 'الشهادات', cta: 'أضف شهادتك' },
-    contact: { title: 'اتصل بي', description: 'هل لديك سؤال أو ترغب في العمل معًا؟ لا تتردد في التواصل!', name_label: 'اسمك', email_label: 'بريدك الإلكتروني', message_label: 'رسالتك', send_message: 'إرسال الرسالة', success: 'تم إرسال الرسالة بنجاح!', error: 'فشل إرسال الرسالة. الرجاء المحاولة مرة أخرى لاحقًا.', email_info: 'راسلنا مباشرة على', phone_info: 'اتصل بنا على' },
-    footer: { copyright: `© ${new Date().getFullYear()} مهدي غريبكوف. جميع الحقوق محفوظة.` }
+    cta: { title: 'Давайте на связи', subtitle: 'Заинтересованы в совместной работе или обсуждении того, как мои навыки могут принести пользу вашей команде? Я всегда открыт для новых возможностей и вызовов.', button: 'Свяжитесь со мной' },
+    footer: { copyright: '© 2024 Махди Грибков. Создано с душой и кодом.' },
+    notFound: { title: '404 - Страница не найдена', message: 'Ой! Кажется, страница, которую вы ищете, не существует.', goHome: 'На главную' },
+    themeToggle: { light: 'Светлая тема', dark: 'Темная тема' }
   },
   he: {
-    nav: { home: 'בית', about: 'אודות', projects: 'פרויקטים', skills: 'כישורים', testimonials: 'המלצות', contact: 'צור קשר' },
-    hero: { name: 'מהדי גריבקוב', title: 'מפתח Full Stack', bio: 'מפתח Full Stack ממוקד תוצאות ורב לשוני עם תשוקה עזה ליצירת יישומי אינטרנט אלגנטיים ובעלי ביצועים גבוהים. אני מתמחה במינוף פרימוורקי JavaScript מודרניים וטכנולוגיות צד שרת לבניית פתרונות סקלביליים וממוקדי משתמש. הגישה שלי משלבת מומחיות טכנית עם פתרון בעיות יצירתי, במטרה לגשר על הפער בין רעיונות חדשניים למוצרים מוחשיים ובעלי השפעה.', cta: 'צפה בעבודות שלי' },
-    about: { title: 'אודותיי', greeting: "שלום! אני מהדי.", bio_p1: "כמפתח Full Stack, אני משגשג באתגר של הבאת חוויות דיגיטליות מורכבות לחיים. המסע שלי בטכנולוגיה מונע על ידי סקרנות בלתי פוסקת ומחויבות ללמידה מתמדת. אני בעל כישורי פרונט-אנד חזקים ב-HTML, CSS, JavaScript, TypeScript, ופרימוורקים כמו React, המשלימים על ידי מומחיות חזקה בצד השרת ב-Node.js וניהול מסדי נתונים עם MongoDB.", bio_p2: "היכולות הרב-לשוניות שלי (אנגלית, ערבית, רוסית, עברית) משפרות את שיתוף הפעולה שלי בצוותים מגוונים וגלובליים, ומאפשרות לי לגשר על פערי תקשורת ולקדם סביבות פיתוח כוללניות יותר. אני תמיד נלהב לקחת על עצמי אתגרים חדשים ולתרום לפרויקטים שפורצים את גבולות הטכנולוגיה.", download_cv: 'הורד קורות חיים' },
-    skills: { title: 'כישורים', categories: { frontend: 'פרונט-אנד', backend: 'בק-אנד', databases: 'מסדי נתונים', tools: 'כלים', languages: 'שפות' },
-      frontend_list: ['React', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Vite'],
-      backend_list: ['Node.js', 'Express.js', 'RESTful APIs', 'אימות (JWT)', 'WebSockets'],
-      databases_list: ['MongoDB', 'SQL (PostgreSQL, MySQL)', 'Mongoose'],
-      tools_list: ['Git', 'GitHub', 'VS Code', 'Webpack', 'Figma (בסיסי)', 'ESLint', 'NPM/Yarn'],
-      languages_list: ['JavaScript', 'TypeScript', 'Python', 'SQL', 'Bash']
-    },
-    projects: { title: 'הפרויקטים שלי', view_project: 'צפה בפרויקט', view_code: 'צפה בקוד' },
-    testimonials: { title: 'המלצות', cta: 'השאר המלצה' },
-    contact: { title: 'צור קשר', description: 'יש לך שאלה או שאתה רוצה לעבוד יחד? אל תהסס לפנות!', name_label: 'השם שלך', email_label: 'האימייל שלך', message_label: 'ההודעה שלך', send_message: 'שלח הודעה', success: 'ההודעה נשלחה בהצלחה!', error: 'שליחת ההודעה נכשלה. אנא נסה שוב מאוחר יותר.', email_info: 'שלח לנו מייל ישירות לכתובת', phone_info: 'התקשר אלינו למספר' },
-    footer: { copyright: `© ${new Date().getFullYear()} מהדי גריבקוב. כל הזכויות שמורות.` }
-  }
-};
-
-const projectsData = [
-  {
-    id: 1,
-    name: 'E-commerce Platform',
-    description: {
-      en: 'A full-stack e-commerce solution with user authentication, product management, shopping cart functionality, and secure payment integration. Built with React, Node.js, Express, and MongoDB.',
-      ru: 'Полнофункциональное решение для электронной коммерции с аутентификацией пользователей, управлением товарами, корзиной покупок и безопасной интеграцией платежей. Создано с использованием React, Node.js, Express и MongoDB.',
-      ar: 'حل تجارة إلكترونية متكامل مع مصادقة المستخدم، وإدارة المنتجات، ووظيفة سلة التسوق، وتكامل دفع آمن. مبني باستخدام React وNode.js وExpress وMongoDB.',
-      he: 'פתרון מסחר אלקטרוני Full Stack עם אימות משתמשים, ניהול מוצרים, פונקציונליות עגלת קניות ושילוב תשלומים מאובטח. נבנה עם React, Node.js, Express ו-MongoDB.',
-    },
-    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'Stripe'],
-    imageUrl: 'https://via.placeholder.com/600x400/16213e/e0e0e0?text=E-commerce+Platform',
-    projectUrl: '#',
-    codeUrl: '#',
-  },
-  {
-    id: 2,
-    name: 'Real-time Chat Application',
-    description: {
-      en: 'A real-time chat application featuring user registration, persistent messaging, and online status indicators. Utilizes WebSockets for instant communication.',
-      ru: 'Приложение для обмена сообщениями в реальном времени с регистрацией пользователей, постоянными сообщениями и индикаторами онлайн-статуса. Использует WebSockets для мгновенной связи.',
-      ar: 'تطبيق دردشة في الوقت الفعلي يتميز بتسجيل المستخدمين، والرسائل المستمرة، ومؤشرات الحالة عبر الإنترنت. يستخدم WebSockets للاتصال الفوري.',
-      he: 'אפליקציית צ\'אט בזמן אמת הכוללת רישום משתמשים, הודעות מתמשכות ומחווני סטטוס מקוון. משתמש ב-WebSockets לתקשורת מיידית.',
-    },
-    tags: ['React', 'Node.js', 'Socket.IO', 'Express', 'MongoDB'],
-    imageUrl: 'https://via.placeholder.com/600x400/16213e/e0e0e0?text=Chat+Application',
-    projectUrl: '#',
-    codeUrl: '#',
-  },
-  {
-    id: 3,
-    name: 'Task Management System',
-    description: {
-      en: 'A robust task management system with features like task creation, assignment, progress tracking, and due date reminders. Designed for individual and team productivity.',
-      ru: 'Надежная система управления задачами с функциями создания задач, назначения, отслеживания прогресса и напоминаний о сроках. Разработана для индивидуальной и командной продуктивности.',
-      ar: 'نظام قوي لإدارة المهام يتميز بميزات مثل إنشاء المهام، وتعيينها، وتتبع التقدم، وتذكيرات بالمواعيد النهائية. مصمم للإنتاجية الفردية والجماعية.',
-      he: 'מערכת לניהול משימות חזקה עם תכונות כמו יצירת משימות, הקצאה, מעקב התקדמות ותזכורות תאריך יעד. מיועדת לפרודוקטיביות אישית וצוותית.',
-    },
-    tags: ['React', 'Node.js', 'Express', 'PostgreSQL', 'Sequelize'],
-    imageUrl: 'https://via.placeholder.com/600x400/16213e/e0e0e0?text=Task+Manager',
-    projectUrl: '#',
-    codeUrl: '#',
-  },
-];
-
-const testimonialsData = [
-  {
-    id: 1,
-    name: 'Jane Doe',
-    position: {
-      en: 'CEO, Tech Solutions',
-      ru: 'Генеральный директор, Tech Solutions',
-      ar: 'الرئيس التنفيذي، حلول التكنولوجيا',
-      he: 'מנכ"לית, Tech Solutions',
-    },
-    quote: {
-      en: "Mahdy's expertise in full-stack development is truly impressive. He delivered an outstanding product on time and exceeded our expectations.",
-      ru: 'Экспертиза Махди в Full Stack разработке действительно впечатляет. Он предоставил выдающийся продукт вовремя и превзошел наши ожидания.',
-      ar: 'خبرة مهدي في تطوير Full Stack رائعة حقًا. لقد قدم منتجًا متميزًا في الوقت المحدد وتجاوز توقعاتنا.',
-      he: 'המומחיות של מהדי בפיתוח Full Stack באמת מרשימה. הוא סיפק מוצר יוצא מן הכלל בזמן ועלה על הציפיות שלנו.',
-    },
-  },
-  {
-    id: 2,
-    name: 'John Smith',
-    position: {
-      en: 'Project Manager, Innovate Corp',
-      ru: 'Менеджер проектов, Innovate Corp',
-      ar: 'مدير مشروع، Innovate Corp',
-      he: 'מנהל פרויקטים, Innovate Corp',
-    },
-    quote: {
-      en: "Working with Mahdy was a pleasure. His problem-solving skills and dedication to quality are second to none.",
-      ru: 'Работать с Махди было одно удовольствие. Его навыки решения проблем и преданность качеству не имеют себе равных.',
-      ar: 'كان العمل مع مهدي متعة. مهاراته في حل المشكلات وتفانيه في الجودة لا يعلى عليها.',
-      he: 'העבודה עם מהדי הייתה תענוג. כישורי פתרון הבעיות שלו והמסירות לאיכות הם ללא תחרות.',
-    },
-  },
-  {
-    id: 3,
-    name: 'Sarah Chen',
-    position: {
-      en: 'CTO, Global Innovations',
-      ru: 'Технический директор, Global Innovations',
-      ar: 'المدير الفني، Global Innovations',
-      he: 'סמנכ"לית טכנולוגיות, Global Innovations',
-    },
-    quote: {
-      en: "Mahdy is a highly skilled developer who consistently delivers high-quality code. His contributions were invaluable to our project's success.",
-      ru: 'Махди — высококвалифицированный разработчик, который постоянно поставляет высококачественный код. Его вклад был бесценен для успеха нашего проекта.',
-      ar: 'مهدي مطور ماهر للغاية يقدم باستمرار رمزًا عالي الجودة. كانت مساهماته لا تقدر بثمن لنجاح مشروعنا.',
-      he: 'מהדי הוא מפתח מיומן ביותר שמספק באופן עקבי קוד באיכות גבוהה. תרומתו הייתה בעלת ערך רב להצלחת הפרויקט שלנו.',
-    },
-  },
-];
-
-// Helper function to get nested translation safely
-const getTranslation = (obj, path, lang) => {
-  if (!obj || typeof obj !== 'object') return '';
-  const parts = path.split('.');
-  let current = obj[lang]; // Start with the language-specific object
-
-  for (let i = 0; i < parts.length; i++) {
-    if (current && typeof current === 'object' && parts[i] in current) {
-      current = current[parts[i]];
-    } else {
-      // Fallback to English if translation is missing for the current path part
-      current = obj['en'];
-      for (let j = 0; j <= i; j++) {
-        if (current && typeof current === 'object' && parts[j] in current) {
-          current = current[parts[j]];
-        } else {
-          return ''; // Return empty string if even English is missing
-        }
+    nav: { home: 'בית', about: 'אודות', projects: 'פרויקטים', skills: 'מיומנויות', testimonials: 'המלצות', contact: 'צור קשר' },
+    hero: { name: 'מהדי גריבקוב', title: 'מפתח Full Stack', bio: 'מפתח Full Stack רב-לשוני מונחה תוצאות עם תשוקה עזה ליצירת יישומי אינטרנט אלגנטיים ובעלי ביצועים גבוהים. אני מתמחה במינוף מסגרות JavaScript מודרניות וטכנולוגיות צד-שרת לבניית פתרונות מדרגיים וממוקדי משתמש. הגישה שלי משלבת מומחיות טכנית עם פתרון בעיות יצירתי, במטרה לגשר על הפער בין רעיונות חדשניים למוצרים מוחשיים ומשפיעים.', cta: 'צפה בעבודותיי' },
+    about: { title: 'קצת עליי', greeting: 'שלום! אני מהדי.', bio_p1: 'כמפתח Full Stack, אני נהנה מהאתגר של הפיכת חוויות דיגיטליות מורכבות למציאות. המסע שלי בטכנולוגיה מונע מסקרנות בלתי נלאית ומחויבות ללמידה מתמדת. אני בעל כישורי צד-לקוח חזקים ב-HTML, CSS, JavaScript, TypeScript ומסגרות כמו React, המשולבים עם יכולות צד-שרת מוצקות ב-Node.js וניהול מסדי נתונים עם MongoDB.', bio_p2: 'היכולות הרב-לשוניות שלי (אנגלית, ערבית, רוסית, עברית) משפרות את שיתוף הפעולה שלי בצוותים גלובליים מגוונים. אני מיומן בתרגום דרישות עסקיות למפרטים טכניים ובאספקת פרויקטים שלא רק עומדים בציפיות אלא אף עולים עליהן. גישת העבודה שלי מבוססת על מתודולוגיות אג\'יליות, עם דגש על קוד נקי, בדיקות יסודיות ותקשורת פתוחה.', motivation: 'המוטיבציה שלי נובעת מהרצון ליצור טכנולוגיה משמעותית הפותרת בעיות אמיתיות ומספקת חוויות משתמש יוצאות דופן. אני תמיד נרגש להתמודד עם אתגרים חדשים ולתרום לפרויקטים חדשניים.', soft_skills_title: 'חוזקות עיקריות', soft_skills: ['פתרון בעיות', 'יכולת הסתגלות', 'עבודת צוות', 'תקשורת אפקטיבית', 'שימת לב לפרטים', 'תודעת שירות'] },
+    testimonials: {
+      title: 'מה אומרים שותפים לדרך',
+      angel_rattner: {
+        quote: 'אני מכיר את מהדי כבר די הרבה זמן, ואם הייתי צריך לסכם אותו במשפט אחד, זה היה ג\'ק אמיתי של כל המקצועות. הוא מישהו שקולט דברים מהר, מחבר את הנקודות בין תחומים שונים, ותמיד מוצא דרך להוסיף ערך - בין אם זה עם כישורי פיתוח הפרונטאנד שלו, החוש העסקי החד שלו, או הקלות הטבעית שלו עם אנשים. יש לו כישרון אמיתי לשירות לקוחות, תמיד יודע איך לתקשר בבהירות ולגרום לאנשים להרגיש שמקשיבים להם. במקביל, הוא רואה מעבר למשימה המיידית וחושב אסטרטגית, לעתים קרובות מזהה הזדמנויות שאחרים עשויים לפספס. חכם, רב-גוני, ומכוון אנשים. הוא מישהו שאתה רוצה בצד שלך.',
+        author: 'אנג\'ל רטנר',
+        role: 'מפתח תוכנה',
+        context: 'אנג\'ל ניהל את מהדי ישירות'
       }
-      break; // Stop looking for further parts in the current language
-    }
+    },
+    cta: { title: 'בואו נתחבר', subtitle: 'מעוניינים לעבוד יחד או לדון כיצד הכישורים שלי יכולים להועיל לצוות שלכם? אני תמיד פתוח להזדמנויות ואתגרים חדשים.', button: 'פנה אליי' },
+    footer: { copyright: '© 2024 מהדי גריבקוב. נוצר בתשוקה ובקוד.' },
+    notFound: { title: '404 - הדף לא נמצא', message: 'אופס! נראה שהדף שאתה מחפש אינו קיים.', goHome: 'חזור לדף הבית' },
+    themeToggle: { light: 'מצב בהיר', dark: 'מצב כהה' }
   }
-  return typeof current === 'string' ? current : ''; // Ensure it's a string before returning
 };
 
+const initialProjects = [
+  { id: 'ecommerce-platform', name: 'E-Commerce Platform', description_en: 'A comprehensive full-stack e-commerce solution...', description_ar: 'حل تجارة إلكترونية متكامل...', description_ru: 'Комплексное full-stack решение...', description_he: 'פתרון מסחר אלקטרוני...', tech: ['React', 'Node.js', 'MongoDB', 'Express', 'JWT'], github: 'https://github.com/Mahdy-gribkov/ecommerce-platform', demo: '#project-ecommerce-demo' },
+  { id: 'task-management-app', name: 'Task Management App', description_en: 'A collaborative task management application...', description_ar: 'تطبيق إدارة مهام تعاوني...', description_ru: 'Совместное приложение для...', description_he: 'יישום ניהול משימות שיתופי...', tech: ['TypeScript', 'React', 'Tailwind CSS'], github: 'https://github.com/Mahdy-gribkov/task-manager', demo: '#project-taskmanager-demo' },
+  { id: 'weather-dashboard', name: 'Weather Dashboard', description_en: 'A responsive weather dashboard providing current weather...', description_ar: 'لوحة تحكم للطقس سريعة الاستجابة...', description_ru: 'Отзывчивая панель погоды...', description_he: 'לוח מחוונים למזג אוויר...', tech: ['JavaScript', 'React', 'OpenWeatherMap API', 'CSS Grid', 'Axios'], github: 'https://github.com/Mahdy-gribkov/weather-app', demo: '#project-weatherapp-demo' }
+];
 
-const Portfolio = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [language, setLanguage] = useState('en'); // Default language is English
-  const [t, setT] = useState(translations.en); // Initialize with English translations
+const skills = [
+  'HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'React', 
+  'Node.js', 'MongoDB', 'Git & GitHub', 'Docker',
+  'Tailwind CSS', 'REST APIs', 'CI/CD'
+];
 
+const trustedTech = [
+  { name: 'React', icon: <Code size={28} /> }, { name: 'Node.js', icon: <Code size={28} /> },
+  { name: 'MongoDB', icon: <Code size={28} /> }, { name: 'GitHub', icon: <Github size={28} /> },
+  { name: 'Docker', icon: <Code size={28} /> }, { name: 'Tailwind CSS', icon: <Code size={28} /> }
+];
+
+const Helmet = ({ children }) => {
   useEffect(() => {
-    setT(translations[language]);
-  }, [language]);
-
-  useEffect(() => {
-    document.body.classList.toggle('light-theme', !isDarkMode);
-  }, [isDarkMode]);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  const changeLanguage = (lang) => {
-    setLanguage(lang);
-    setIsMenuOpen(false); // Close menu on language change
-  };
-
-  const sectionsRef = useRef([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-visible');
-          } else {
-            entry.target.classList.remove('fade-in-visible');
+    const head = document.head;
+    const elements = [];
+    React.Children.forEach(children, child => {
+      if (React.isValidElement(child)) {
+        const { type, props } = child;
+        const element = document.createElement(type);
+        for (const propName in props) {
+          if (props.hasOwnProperty(propName) && propName !== 'children') {
+            element.setAttribute(propName, props[propName]);
           }
-        });
-      },
-      { threshold: 0.1 } // Trigger when 10% of the item is visible
-    );
-
-    sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => {
-      sectionsRef.current.forEach((section) => {
-        if (section) observer.unobserve(section);
-      });
-    };
-  }, []);
-
-  // For "Back to Top" button
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) { // Show button after scrolling 300px
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
+        }
+        if (props.children) {
+          element.textContent = props.children;
+        }
+        head.appendChild(element);
+        elements.push(element);
       }
+    });
+    return () => {
+      elements.forEach(el => head.removeChild(el));
+    };
+  }, [children]);
+  return null;
+};
+
+
+export default function Portfolio() {
+  const [currentLang, setCurrentLang] = useState('en');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [formStatus, setFormStatus] = useState({ submitting: false, success: false, error: false, message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [theme, setTheme] = useState('light');  // Changed from 'dark' to 'light'
+
+  const t = translations[currentLang];
+  const isRTL = currentLang === 'ar' || currentLang === 'he';
+
+  const sectionRefs = { home: useRef(null), about: useRef(null), projects: useRef(null), skills: useRef(null), testimonials: useRef(null), contact: useRef(null) };
+
+  useEffect(() => {  // Scroll & Back-to-Top Logic
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+      // Active section highlighting logic
+      let current = 'home';
+      Object.entries(sectionRefs).forEach(([id, ref]) => {
+        const section = ref.current;
+        if (section) {
+          const sectionTop = section.offsetTop;
+          if (window.scrollY >= sectionTop - window.innerHeight / 2.5) {  // Adjusted offset
+            current = id;
+          }
+        }
+      });
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll();  // Call on mount to set initial active section
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, []);  // Empty dependency array, sectionRefs don't change
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToSection = (sectionId) => {
+    sectionRefs[sectionId].current.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus({ submitting: true, success: false, error: false, message: '' });
+    await new Promise(resolve => setTimeout(resolve, 1500)); 
+    
+    if (Math.random() > 0.1) { 
+      console.log('Form submitted successfully', formData);
+      setFormStatus({ submitting: false, success: true, error: false, message: t.contact.form.success });
+      setFormData({ name: '', email: '', message: '' });
+    } else {
+      console.error('Form submission failed');
+      setFormStatus({ submitting: false, success: false, error: true, message: t.contact.form.error });
+    }
+    setTimeout(() => setFormStatus({ submitting: false, success: false, error: false, message: '' }), 6000);
+  };
+  
+  const resumePath = 'assets/Mahdy_Gribkov_CV.pdf'; // Path to CV assumed to be in public/assets
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  useEffect(() => {  // Apply theme class to body
+    document.body.classList.remove('theme-light', 'theme-dark');
+    document.body.classList.add(`theme-${theme}`);
+  }, [theme]);
+
   return (
-    <div className="min-h-screen flex flex-col font-sans">
-      {/* Header/Navbar */}
-      <header className="fixed w-full bg-background-primary bg-opacity-90 backdrop-blur-sm z-50 shadow-lg border-b border-border-color">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="#hero" className="text-2xl font-bold text-accent-primary">Mahdy.Dev</a>
-          <div className="hidden md:flex space-x-6 items-center">
-            <a href="#hero" className="nav-link">{t.nav.home}</a>
-            <a href="#about" className="nav-link">{t.nav.about}</a>
-            <a href="#projects" className="nav-link">{t.nav.projects}</a>
-            <a href="#skills" className="nav-link">{t.nav.skills}</a>
-            <a href="#testimonials" className="nav-link">{t.nav.testimonials}</a>
-            <a href="#contact" className="nav-link">{t.nav.contact}</a>
-            <button onClick={toggleDarkMode} className="p-2 rounded-full text-text-primary hover:text-accent-primary transition-colors duration-300" aria-label="Toggle dark mode">
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <div className="relative group">
-              <button className="flex items-center text-text-primary hover:text-accent-primary transition-colors duration-300">
-                <Globe size={20} className="mr-1" />
-                <ChevronDown size={16} />
+    <div 
+      className={`min-h-screen ${isRTL ? (currentLang === 'ar' ? 'font-arabic' : 'font-hebrew') : 'ltr font-sans'} transition-colors duration-300`} 
+      dir={isRTL ? 'rtl' : 'ltr'}
+      lang={currentLang}
+    >
+      <Helmet>
+        <title>Mahdy Gribkov - Full Stack Developer</title>
+        <meta name="description" content={translations.en.hero.bio} />
+        <meta name="keywords" content="Mahdy Gribkov, Full Stack Developer, Web Developer, React, Node.js, JavaScript, TypeScript, Portfolio, Arabic, Russian, Hebrew" />
+        <meta property="og:title" content="Mahdy Gribkov - Full Stack Developer" />
+        <meta property="og:description" content={translations.en.hero.bio} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://your-actual-domain.com" /> {/* Placeholder URL */}
+        <meta property="og:image" content="https://your-actual-domain.com/og-image.png" /> {/* Placeholder URL */}
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="ar_AR" />
+        <meta property="og:locale:alternate" content="ru_RU" />
+        <meta property="og:locale:alternate" content="he_IL" />
+        <link rel="canonical" href="https://your-actual-domain.com" /> {/* Placeholder URL */}
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+        <link rel="manifest" href="manifest.webmanifest" />
+      </Helmet>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap'); /* Arabic */
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap'); /* Hebrew */
+        
+        :root { /* Default Dark Theme Variables */
+          --bg-primary: #0a192f; --bg-secondary: #172a45; --text-primary: #ccd6f6; --text-secondary: #8892b0;
+          --text-headings: #e6f1ff; --accent-primary: #64ffda; --accent-secondary: #79c0ff; --border-color: rgba(100, 255, 218, 0.1);
+          --card-bg: var(--bg-secondary); --card-border: #233554; --input-bg: var(--bg-secondary); --input-border: #233554;
+        }
+        .theme-light { /* Light Theme Variables */
+          --bg-primary: #f8f9fa; --bg-secondary: #ffffff; --text-primary: #212529; --text-secondary: #495057;
+          --text-headings: #0a192f; --accent-primary: #007bff; --accent-secondary: #17a2b8; --border-color: #dee2e6;
+          --card-bg: #ffffff; --card-border: #e9ecef; --input-bg: #ffffff; --input-border: #ced4da;
+        }
+        
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-secondary); line-height: 1.6; transition: background-color 0.3s, color 0.3s; }
+        .font-arabic { font-family: 'Cairo', sans-serif; } .font-hebrew { font-family: 'Rubik', sans-serif; }
+        
+        html { scroll-behavior: smooth; }
+        
+        .nav-sticky { backdrop-filter: blur(10px); background: color-mix(in srgb, var(--bg-primary) 85%, transparent); border-bottom: 1px solid var(--border-color); }
+        .gradient-text { background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        
+        .section-title { position: relative; padding-bottom: 0.75rem; margin-bottom: 2.5rem; display: inline-block; color: var(--text-headings); }
+        .section-title::after { content: ''; position: absolute; bottom: 0; width: 70px; height: 4px; background-color: var(--accent-primary); border-radius: 2px; }
+        .section-title.rtl-title::after { right: 0; } .section-title.ltr-title::after { left: 0; }
+        .text-center .section-title::after { left: 50%; transform: translateX(-50%); }
+        
+        .skill-tag { transition: all 0.2s ease-in-out; border: 1px solid var(--accent-primary); color: var(--accent-primary); background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+        .skill-tag:hover { background-color: color-mix(in srgb, var(--accent-primary) 20%, transparent); box-shadow: 0 0 15px color-mix(in srgb, var(--accent-primary) 20%, transparent); transform: translateY(-3px); }
+        
+        .project-card { background-color: var(--card-bg); border: 1px solid var(--card-border); transition: all 0.3s ease-out; color: var(--text-primary); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .theme-dark .project-card { box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .project-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px -15px rgba(2,12,27,0.3); }
+        .theme-light .project-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .project-card h3 { color: var(--text-headings); } .project-card p { color: var(--text-secondary); }
+        .project-card .tech-badge { background-color: color-mix(in srgb, var(--accent-primary) 15%, transparent); color: var(--accent-primary); }
+        
+        .btn-primary { background-color: transparent; border: 1px solid var(--accent-primary); color: var(--accent-primary); transition: all 0.2s ease-in-out; }
+        .btn-primary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+        .btn-secondary { background-color: var(--accent-primary); color: var(--bg-primary); } /* High contrast for secondary */
+        .theme-dark .btn-secondary { color: var(--bg-primary); }
+        .theme-light .btn-secondary { color: #fff; }
+        .btn-secondary:hover { filter: brightness(1.1); }
+
+        .testimonial-card { background-color: var(--card-bg); border-${isRTL ? 'right' : 'left'}: 4px solid var(--accent-primary); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .theme-dark .testimonial-card { box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        .testimonial-card p { color: var(--text-secondary); } .testimonial-card .author-name { color: var(--text-headings); }
+        
+        /* Contact Form Field Colors */
+        input, textarea { background-color: var(--input-bg); border: 1px solid var(--input-border); color: #ffffff; border-radius: 0.375rem; }
+        input:focus, textarea:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent); outline: none; }
+        /* Using a custom class for labels for explicit white color */
+        .contact-label { color: #ffffff; }
+
+        .nav-link.active { color: var(--accent-primary); font-weight: 600; }
+        .nav-link { color: var(--text-primary); } .nav-link:hover { color: var(--accent-primary); }
+
+        .back-to-top {
+          position: fixed; bottom: 2rem; ${isRTL ? 'left: 2rem;' : 'right: 2rem;'} z-index: 100;
+          background-color: var(--accent-primary); color: var(--bg-primary);
+          border-radius: 50%; padding: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          transition: opacity 0.3s, transform 0.3s; opacity: 0; transform: translateY(100%);
+        }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { filter: brightness(1.1); transform: translateY(-2px) scale(1.05); }
+
+        .theme-toggle-button {
+            background-color: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-secondary);
+            padding: 0.5rem; border-radius: 0.375rem; display: flex; align-items: center;
+        }
+        .theme-toggle-button:hover { color: var(--accent-primary); border-color: var(--accent-primary); }
+
+        @media print {
+          body { background-color: white; color: black; font-family: 'Times New Roman', serif; }
+          .no-print, .nav-sticky, footer, .back-to-top, .theme-toggle-button { display: none !important; }
+          .print-section { page-break-inside: avoid; color: black !important; background-color: white !important; }
+          .gradient-text { color: black !important; background: none; -webkit-text-fill-color: black; }
+          #home.print-section, #about.print-section, #contact.print-section { display: block; }
+          .project-card, .testimonial-card { background-color: #f9f9f9 !important; border: 1px solid #ddd !important; color: black !important; }
+          .project-card h3, .testimonial-card .author-name { color: black !important; }
+          .project-card p, .testimonial-card p { color: #333 !important; }
+          .section-title::after { background-color: black !important; }
+        }
+      `}</style>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 nav-sticky" role="navigation" aria-label="Main navigation">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home');}} className="text-2xl font-bold text-[var(--accent-primary)] hover:opacity-80 transition-opacity duration-300">MG.</a>
+            
+            <div className="hidden md:flex items-center space-x-4"> {/* Reduced space slightly */}
+              {Object.entries(t.nav).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => scrollToSection(key)}
+                  className={`nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${activeSection === key ? 'active' : ''}`}
+                  aria-current={activeSection === key ? 'page' : undefined}
+                >
+                  {label}
+                </button>
+              ))}
+              <div className={`flex items-center space-x-1 bg-transparent p-0.5 rounded-md`}>
+                {['en', 'ar', 'ru', 'he'].map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setCurrentLang(lang)}
+                    className={`px-2 py-0.5 rounded text-xs font-semibold transition-all duration-200 ${
+                      currentLang === lang 
+                         ? 'bg-[var(--accent-primary)] text-[var(--bg-primary)] scale-110 ring-1 ring-[var(--accent-primary)]' 
+                         : 'text-[var(--text-primary)] hover:text-[var(--accent-primary)]'
+                    }`}
+                    aria-label={`Switch to ${lang.toUpperCase()}`}
+                    lang={lang}
+                  >
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              <button onClick={toggleTheme} className="theme-toggle-button" aria-label={theme === 'dark' ? t.themeToggle.light : t.themeToggle.dark}>
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <div className="absolute right-0 mt-2 w-24 bg-background-secondary rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-                <button onClick={() => changeLanguage('en')} className="block w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-accent-secondary">English</button>
-                <button onClick={() => changeLanguage('ru')} className="block w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-accent-secondary">Русский</button>
-                <button onClick={() => changeLanguage('ar')} className="block w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-accent-secondary">العربية</button>
-                <button onClick={() => changeLanguage('he')} className="block w-full text-left px-4 py-2 text-sm text-text-primary hover:bg-accent-secondary">עברית</button>
+            </div>
+
+            <div className="md:hidden flex items-center">
+                <button onClick={toggleTheme} className="theme-toggle-button mr-2" aria-label={theme === 'dark' ? t.themeToggle.light : t.themeToggle.dark}>
+                    {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md text-[var(--text-primary)] hover:text-[var(--accent-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]" aria-label="Toggle menu" aria-expanded={isMenuOpen}>
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+          </div>
+        </div>
+
+        {isMenuOpen && (  /* Mobile Menu */
+          <div className="md:hidden border-t border-[var(--border-color)] bg-[var(--bg-primary)] shadow-lg">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {Object.entries(t.nav).map(([key, label]) => (
+                <button key={key} onClick={() => scrollToSection(key)} className={`block w-full text-${isRTL ? 'right' : 'left'} px-3 py-2.5 rounded-md text-base font-medium ${activeSection === key ? 'text-[var(--accent-primary)] bg-[color-mix(in_srgb,_var(--accent-primary)_10%,_transparent)]' : 'text-[var(--text-primary)] hover:text-[var(--accent-primary)] hover:bg-[color-mix(in_srgb,_var(--accent-primary)_5%,_transparent)]'}`}>
+                  {label}
+                </button>
+              ))}
+              <div className={`flex space-x-2 px-3 py-3 justify-center border-t border-[var(--border-color)] mt-2 pt-3`}>
+                {['en', 'ar', 'ru', 'he'].map((lang) => (
+                  <button key={lang} onClick={() => { setCurrentLang(lang); setIsMenuOpen(false); }} className={`px-3.5 py-1.5 rounded text-sm font-medium ${currentLang === lang ? 'bg-[var(--accent-primary)] text-[var(--bg-primary)]' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)]'}`}>
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
-          <div className="md:hidden flex items-center">
-            <button onClick={toggleDarkMode} className="p-2 rounded-full text-text-primary hover:text-accent-primary transition-colors duration-300 mr-2" aria-label="Toggle dark mode">
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button onClick={toggleMenu} className="text-text-primary focus:outline-none">
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-        </nav>
-      </header>
+        )}
+      </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 bg-background-primary z-40 flex flex-col items-center justify-center space-y-6 pt-20">
-          <a href="#hero" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.home}</a>
-          <a href="#about" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.about}</a>
-          <a href="#projects" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.projects}</a>
-          <a href="#skills" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.skills}</a>
-          <a href="#testimonials" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.testimonials}</a>
-          <a href="#contact" className="text-2xl text-text-primary hover:text-accent-primary transition-colors" onClick={toggleMenu}>{t.nav.contact}</a>
-          <div className="flex space-x-4 mt-6">
-            <button onClick={() => changeLanguage('en')} className="px-4 py-2 text-text-primary hover:text-accent-primary border border-accent-primary rounded-full">EN</button>
-            <button onClick={() => changeLanguage('ru')} className="px-4 py-2 text-text-primary hover:text-accent-primary border border-accent-primary rounded-full">RU</button>
-            <button onClick={() => changeLanguage('ar')} className="px-4 py-2 text-text-primary hover:text-accent-primary border border-accent-primary rounded-full">AR</button>
-            <button onClick={() => changeLanguage('he')} className="px-4 py-2 text-text-primary hover:text-accent-primary border border-accent-primary rounded-full">HE</button>
-          </div>
-        </div>
-      )}
-
-      <main className="flex-grow pt-16"> {/* Add padding top to account for fixed header */}
+      <main className="bg-[var(--bg-primary)] text-[var(--text-primary)]">
         {/* Hero Section */}
-        <section id="hero" ref={el => sectionsRef.current[0] = el} className="fade-in bg-cover bg-center flex items-center justify-center text-center px-4" style={{ backgroundImage: 'url("https://via.placeholder.com/1920x1080/0f3460/e0e0e0?text=Hero+Background")', minHeight: 'calc(100vh - 64px)' }}>
-          <div className="bg-background-secondary bg-opacity-80 p-8 rounded-lg shadow-xl max-w-2xl transform transition-transform duration-500 hover:scale-105">
-            <h1 className="text-5xl font-extrabold text-accent-primary mb-4 animate-fade-in-down">{t.hero.name}</h1>
-            <p className="text-3xl font-light text-text-primary mb-6 animate-fade-in-up">{t.hero.title}</p>
-            <p className="text-lg text-text-secondary mb-8 leading-relaxed animate-fade-in">{t.hero.bio}</p>
-            <a href="#projects" className="btn-primary animate-scale-in">{t.hero.cta}</a>
+        <section ref={sectionRefs.home} id="home" className="pt-24 md:pt-32 pb-16 min-h-[calc(100vh-4rem)] flex items-center print-section" data-section="hero">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-${isRTL ? 'right' : 'left'} fade-in-up`}>
+              <div className="mb-8">
+                <div className={`inline-block w-24 h-24 md:w-32 md:h-32 p-1 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-full shadow-lg`}>
+                    {/* Placeholder for photo, replace with img tag and path */}
+                    <img src="assets/profile.jpg" alt="Mahdy Gribkov" className="w-full h-full rounded-full object-cover" />
+                </div>
+              </div>
+              <p className="text-lg text-[var(--accent-primary)] mb-3 font-mono">Hi, my name is</p>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[var(--text-headings)] mb-4">
+                {t.hero.name}.
+              </h1>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--text-secondary)] mb-6">
+                {t.hero.title}.
+              </h2>
+              <p className="text-base md:text-lg text-[var(--text-secondary)] max-w-xl mb-10 leading-relaxed">
+                {t.hero.bio}
+              </p>
+              <button
+                onClick={() => scrollToSection('projects')}
+                className="btn-primary inline-flex items-center px-8 py-3 rounded-md text-lg font-medium group"
+              >
+                {t.hero.cta}
+                <ArrowRight className={`${isRTL ? 'mr-2 -scale-x-100 group-hover:-translate-x-1' : 'ml-2 group-hover:translate-x-1'} transition-transform duration-200`} size={20} />
+              </button>
+            </div>
           </div>
         </section>
 
         {/* About Section */}
-        <section id="about" ref={el => sectionsRef.current[1] = el} className="fade-in bg-background-primary py-16 px-4">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2 flex justify-center">
-              <img
-                src="https://via.placeholder.com/400x400/e94560/FFFFFF?text=Mahdy+Gribkov"
-                alt="Mahdy Gribkov"
-                className="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-accent-primary shadow-lg transform transition-transform duration-500 hover:scale-105"
-              />
-            </div>
-            <div className="md:w-1/2 text-center md:text-left">
-              <h2 className="text-4xl font-bold text-text-primary mb-6">{t.about.title}</h2>
-              <p className="text-xl text-accent-primary font-semibold mb-4">{t.about.greeting}</p>
-              <p className="text-lg text-text-secondary mb-4 leading-relaxed">{t.about.bio_p1}</p>
-              <p className="text-lg text-text-secondary mb-6 leading-relaxed">{t.about.bio_p2}</p>
-              <a href="/path/to/your/cv.pdf" download className="btn-secondary">
-                <Download size={20} className="inline-block mr-2" /> {t.about.download_cv}
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        <section id="skills" ref={el => sectionsRef.current[2] = el} className="fade-in bg-background-secondary py-16 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-text-primary mb-12">{t.skills.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-              {Object.keys(t.skills.categories).map((categoryKey) => (
-                <div key={categoryKey} className="card p-6 border border-border-color transform transition-transform duration-300 hover:scale-105">
-                  <h3 className="text-2xl font-semibold text-accent-primary mb-4 flex items-center justify-center">
-                    <Code size={24} className="mr-2" />
-                    {getTranslation(translations, `skills.categories.${categoryKey}`, language)}
-                  </h3>
-                  <ul className="text-left space-y-2 text-text-secondary">
-                    {t.skills[`${categoryKey}_list`] && t.skills[`${categoryKey}_list`].map((skill, index) => (
-                      <li key={index} className="flex items-center">
-                        <CheckCircle size={18} className="text-green-500 mr-2" /> {skill}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+        <section ref={sectionRefs.about} id="about" className="py-20 bg-[var(--bg-secondary)] print-section" data-section="about">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className={`section-title text-3xl md:text-4xl font-bold ${isRTL ? 'rtl-title text-right' : 'ltr-title text-left'}`}>
+              {t.about.title}
+            </h2>
+            <div className={`space-y-6 text-[var(--text-secondary)] text-lg leading-relaxed text-${isRTL ? 'right' : 'left'}`}>
+              <p><span className="font-semibold text-[var(--text-primary)]">{t.about.greeting}</span> {t.about.bio_p1}</p>
+              <p>{t.about.bio_p2}</p>
+              <p className={`italic text-[var(--text-primary)] border-${isRTL ? 'r' : 'l'}-4 border-[var(--accent-primary)] p${isRTL ? 'r' : 'l'}-4 bg-[color-mix(in_srgb,_var(--accent-primary)_5%,_transparent)] rounded-sm`}>{t.about.motivation}</p>
+              <div>
+                <h3 className="text-xl font-semibold text-[var(--text-headings)] mt-10 mb-4">{t.about.soft_skills_title}</h3>
+                <ul className={`grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-[var(--text-secondary)]`}>
+                  {t.about.soft_skills.map(skill => <li key={skill} className="flex items-center"><CheckCircle size={18} className={`text-[var(--accent-primary)] ${isRTL ? 'ml-2' : 'mr-2'} flex-shrink-0`} /> {skill}</li>)}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Projects Section */}
-        <section id="projects" ref={el => sectionsRef.current[3] = el} className="fade-in bg-background-primary py-16 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-text-primary mb-12">{t.projects.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {projectsData.map((project) => (
-                <div key={project.id} className="card bg-background-secondary rounded-lg overflow-hidden border border-border-color">
-                  <img src={project.imageUrl} alt={project.name} className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-2xl font-semibold text-text-primary mb-3">{project.name}</h3>
-                    <p className="text-text-secondary mb-4 min-h-[72px]">{project.description[language] || project.description.en}</p>
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {project.tags.map((tag, index) => (
-                        <span key={index} className="bg-accent-secondary text-white text-xs font-mono px-3 py-1 rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex justify-around">
-                      <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="btn-primary flex items-center text-sm">
-                        <ExternalLink size={18} className="mr-2" /> {t.projects.view_project}
+        <section ref={sectionRefs.projects} id="projects" className="py-20 bg-[var(--bg-primary)]" data-section="projects">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-${isRTL ? 'right' : 'left'} mb-16`}>
+              <h2 className={`section-title text-3xl md:text-4xl font-bold ${isRTL ? 'rtl-title' : 'ltr-title'}`}>
+                {t.projects.title}
+              </h2>
+              <p className="text-[var(--text-secondary)] mt-2 max-w-2xl">{t.projects.subtitle}</p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {initialProjects.map((project) => (
+                <div key={project.id} className="project-card rounded-lg p-6 flex flex-col h-full" data-project={project.name}>
+                  <div className="flex justify-between items-center mb-4">
+                    <Code size={36} className="text-[var(--accent-primary)]" />
+                    <div className="flex space-x-3">
+                      <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label={`GitHub for ${project.name}`}>
+                        <Github size={22} />
                       </a>
-                      <a href={project.codeUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary flex items-center text-sm">
-                        <Github size={18} className="mr-2" /> {t.projects.view_code}
-                      </a>
+                      {project.demo && project.demo !== '#' && (
+                        <a href={project.demo} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label={`Live demo of ${project.name}`}>
+                          <ExternalLink size={22} />
+                        </a>
+                      )}
                     </div>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">{project.name}</h3>
+                  <p className="text-sm grow mb-4">{project[`description_${currentLang}`] || project.description_en}</p>
+                  <div className="flex flex-wrap gap-2 mt-auto pt-3 border-t border-[var(--border-color)]">
+                    {project.tech.map((tech, i) => (
+                      <span key={i} className="tech-badge px-2.5 py-0.5 rounded-full text-xs font-mono">
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -415,89 +480,165 @@ const Portfolio = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section id="testimonials" ref={el => sectionsRef.current[4] = el} className="fade-in bg-background-secondary py-16 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-text-primary mb-12">{t.testimonials.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {testimonialsData.map((testimonial) => (
-                <div key={testimonial.id} className="card bg-background-primary p-8 border border-border-color">
-                  <Quote size={36} className="text-accent-primary mb-4 mx-auto" />
-                  <p className="text-text-secondary italic mb-6">"{testimonial.quote[language] || testimonial.quote.en}"</p>
-                  <p className="font-semibold text-text-primary text-lg">{testimonial.name}</p>
-                  <p className="text-text-secondary text-sm">{testimonial.position[language] || testimonial.position.en}</p>
+        {/* Skills Section */}
+        <section ref={sectionRefs.skills} id="skills" className="py-20 bg-[var(--bg-secondary)]" data-section="skills">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-${isRTL ? 'right' : 'left'} mb-12`}>
+                <h2 className={`section-title text-3xl md:text-4xl font-bold ${isRTL ? 'rtl-title' : 'ltr-title'}`}>
+                  {t.skills.title}
+                </h2>
+                <p className="text-[var(--text-secondary)] mt-2">{t.skills.subtitle}</p>
+            </div>
+            <div className={`flex flex-wrap ${isRTL ? 'justify-end' : 'justify-start'} gap-3`}>
+              {skills.map((skill) => (  /* Using updated skills list */
+                <span key={skill} className="skill-tag px-4 py-2 rounded-md text-sm font-medium shadow-sm" data-skill={skill}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <section className="py-16 bg-[var(--bg-primary)] no-print" data-section="trust">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 className="text-center text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-8">{t.trust.title}</h3>
+            <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-6">
+              {trustedTech.map((tech) => (
+                <div key={tech.name} className="flex items-center space-x-2 text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors cursor-default group">
+                  {React.cloneElement(tech.icon, {className: `opacity-70 group-hover:opacity-100 transition-opacity text-[var(--text-primary)] group-hover:text-[var(--accent-primary)]`})}
+                  <span className="font-medium">{tech.name}</span>
                 </div>
               ))}
             </div>
-            <a href="mailto:mahdy.gribkov.dev@gmail.com" className="btn-primary mt-12 inline-flex items-center">
-              <Send size={20} className="mr-2" /> {t.testimonials.cta}
-            </a>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section ref={sectionRefs.testimonials} id="testimonials" className="py-20 bg-[var(--bg-secondary)]" data-section="testimonials">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-${isRTL ? 'right' : 'left'} mb-12`}>
+              <h2 className={`section-title text-3xl md:text-4xl font-bold ${isRTL ? 'rtl-title' : 'ltr-title'}`}>
+                {t.testimonials.title}
+              </h2>
+            </div>
+            <div className="space-y-10">
+              {/* Displaying only Angel Rattner's testimonial */}
+              {t.testimonials.angel_rattner && (
+                <div className={`testimonial-card p-6 md:p-8 rounded-lg shadow-lg ${isRTL ? 'text-right' : 'text-left'}`} data-testimonial="angel-rattner">
+                  <Quote className={`text-[var(--accent-primary)] mb-4 ${isRTL ? 'transform scale-x-[-1] float-right ml-2' : 'float-left mr-2'}`} size={28} />
+                  <p className="text-lg italic mb-6 clear-both">{t.testimonials.angel_rattner.quote}</p>
+                  <div className={`flex items-center ${isRTL ? 'justify-end' : ''}`}>
+                    <div className={`w-12 h-12 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-full flex items-center justify-center ${isRTL ? 'ml-4' : 'mr-4'} flex-shrink-0`}>
+                      <span className="font-bold text-[var(--bg-primary)]">
+                        {t.testimonials.angel_rattner.author.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="author-name font-semibold">{t.testimonials.angel_rattner.author}</div>
+                      <div className="text-sm text-[var(--text-secondary)]">{t.testimonials.angel_rattner.role}</div>
+                      <div className="text-xs text-[var(--text-secondary)] italic mt-0.5">({t.testimonials.angel_rattner.context})</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-[var(--bg-primary)] text-center no-print" data-section="cta">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-headings)] mb-4">{t.cta.title}</h2>
+            <p className="text-lg text-[var(--text-secondary)] mb-10 max-w-xl mx-auto">{t.cta.subtitle}</p>
+            <button  /* Changed from a to button to scroll to contact */
+              onClick={() => scrollToSection('contact')}
+              className="btn-primary inline-flex items-center px-10 py-4 rounded-md text-lg font-medium group"
+            >
+              <Mail className={`${isRTL ? 'ml-2' : 'mr-2'}`} size={20} />  {/* Changed icon to Mail */}
+              {t.cta.button}
+            </button>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section id="contact" ref={el => sectionsRef.current[5] = el} className="fade-in bg-background-primary py-16 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-text-primary mb-6">{t.contact.title}</h2>
-            <p className="text-lg text-text-secondary mb-10">{t.contact.description}</p>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-background-secondary p-8 rounded-lg shadow-lg border border-border-color">
-              <div className="md:col-span-1 text-left">
-                <label htmlFor="name" className="block text-text-primary text-sm font-semibold mb-2">{t.contact.name_label}</label>
-                <input type="text" id="name" name="name" className="w-full p-3 rounded-md border border-border-color bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary" />
-              </div>
-              <div className="md:col-span-1 text-left">
-                <label htmlFor="email" className="block text-text-primary text-sm font-semibold mb-2">{t.contact.email_label}</label>
-                <input type="email" id="email" name="email" className="w-full p-3 rounded-md border border-border-color bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary" />
-              </div>
-              <div className="md:col-span-2 text-left">
-                <label htmlFor="message" className="block text-text-primary text-sm font-semibold mb-2">{t.contact.message_label}</label>
-                <textarea id="message" name="message" rows="5" className="w-full p-3 rounded-md border border-border-color bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"></textarea>
-              </div>
-              <div className="md:col-span-2 flex justify-center">
-                <button type="submit" className="btn-primary inline-flex items-center">
-                  <Send size={20} className="mr-2" /> {t.contact.send_message}
+        <section ref={sectionRefs.contact} id="contact" className="py-20 bg-[var(--bg-secondary)] print-section" data-section="contact">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className={`text-${isRTL ? 'right' : 'left'} mb-12`}>
+              <h2 className={`section-title text-3xl md:text-4xl font-bold ${isRTL ? 'rtl-title' : 'ltr-title'}`}>{t.contact.title}</h2>
+              <p className="text-[var(--text-secondary)] mt-2">{t.contact.subtitle}</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label htmlFor="name" className={`block text-sm font-medium contact-label mb-1.5 ${isRTL ? 'text-right' : 'text-left'}`}>{t.contact.form.name}</label> {/* Using custom contact-label class */}
+                  <input type="text" id="name" value={formData.name} onChange={handleInputChange} required className="w-full px-4 py-2.5" />
+                </div>
+                <div>
+                  <label htmlFor="email" className={`block text-sm font-medium contact-label mb-1.5 ${isRTL ? 'text-right' : 'text-left'}`}>{t.contact.form.email}</label> {/* Using custom contact-label class */}
+                  <input type="email" id="email" value={formData.email} onChange={handleInputChange} required className="w-full px-4 py-2.5" />
+                </div>
+                <div>
+                  <label htmlFor="message" className={`block text-sm font-medium contact-label mb-1.5 ${isRTL ? 'text-right' : 'text-left'}`}>{t.contact.form.message}</label> {/* Using custom contact-label class */}
+                  <textarea id="message" rows={4} value={formData.message} onChange={handleInputChange} required className="w-full px-4 py-2.5"></textarea>
+                </div>
+                <button type="submit" disabled={formStatus.submitting} className="btn-primary w-full py-3 rounded-md font-semibold flex items-center justify-center group disabled:opacity-60 disabled:cursor-not-allowed">
+                  {formStatus.submitting ? 'Sending...' : t.contact.form.submit}
+                  {!formStatus.submitting && <Send className={`${isRTL ? 'mr-2 -scale-x-100' : 'ml-2'} group-hover:translate-x-1 transition-transform duration-200`} size={18} />}
                 </button>
+                {formStatus.message && (
+                  <p className={`mt-3 text-sm text-center ${formStatus.success ? 'text-green-400' : 'text-red-400'}`}>
+                    {formStatus.message}
+                  </p>
+                )}
+              </form>
+              <div className={`space-y-8 ${isRTL ? 'text-right md:text-right' : 'text-left md:text-left'}`}>
+                <div>
+                  <h3 className="text-xl font-semibold text-[var(--text-headings)] mb-4">{t.contact.direct_title}</h3>
+                  <div className="space-y-3">
+                    <a href="mailto:mahdy34552@gmail.com" className="flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors group"> {/* Email updated */}
+                      <Mail className={`${isRTL ? 'ml-3' : 'mr-3'} text-[var(--accent-primary)] group-hover:scale-110 transition-transform`} size={20} />  mahdy34552@gmail.com
+                    </a>
+                    <a href="https://wa.me/972532322318" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors group"> {/* Phone number already correct */}
+                      <Phone className={`${isRTL ? 'ml-3' : 'mr-3'} text-[var(--accent-primary)] group-hover:scale-110 transition-transform`} size={20} />  WhatsApp
+                    </a>
+                    <a href="https://www.linkedin.com/in/mahdy-gribkov-ba2707368" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors group">
+                      <Linkedin className={`${isRTL ? 'ml-3' : 'mr-3'} text-[var(--accent-primary)] group-hover:scale-110 transition-transform`} size={20} />  LinkedIn
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-[var(--text-headings)] mb-3">{t.contact.resume_title}</h3>
+                  <a href={resumePath} download="Mahdy_Gribkov_CV.pdf" className="btn-primary inline-flex items-center px-6 py-2.5 rounded-md font-medium group">
+                    <Download className={`${isRTL ? 'ml-2' : 'mr-2'} group-hover:animate-bounce`} size={18} />  {t.contact.resume_cta}
+                  </a>
+                </div>
               </div>
-            </form>
-            <div className="mt-10 text-lg text-text-secondary">
-              <p className="mb-2 flex items-center justify-center">
-                <Mail size={20} className="mr-2 text-accent-primary" /> {t.contact.email_info}:
-                <a href="mailto:mahdy.gribkov.dev@gmail.com" className="ml-2 text-accent-primary hover:underline">mahdy.gribkov.dev@gmail.com</a>
-              </p>
-              <p className="flex items-center justify-center">
-                <Phone size={20} className="mr-2 text-accent-primary" /> {t.contact.phone_info}:
-                <a href="tel:+972532322318" className="ml-2 text-accent-primary hover:underline">+972 53 232 2318</a>
-              </p>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-background-secondary py-8 text-center border-t border-[var(--border-color)]" role="contentinfo" data-section="footer">
+      <footer className="bg-[var(--bg-primary)] py-10 text-center border-t border-[var(--border-color)]" role="contentinfo" data-section="footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center space-x-6 mb-6">
-            <a href="mailto:mahdy.gribkov.dev@gmail.com" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="Email"><Mail size={22} /></a>
+            {/* Footer social icons with updated email/phone */}
+            <a href="mailto:mahdy34552@gmail.com" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="Email"><Mail size={22} /></a> {/* Email updated */}
             <a href="https://github.com/Mahdy-gribkov" target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="GitHub"><Github size={22} /></a>
             <a href="https://www.linkedin.com/in/mahdy-gribkov-ba2707368" target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="LinkedIn"><Linkedin size={22} /></a>
-            <a href="https://wa.me/972532322318" target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="WhatsApp"><Phone size={22} /></a>
+            <a href="https://wa.me/972532322318" target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors" aria-label="WhatsApp"><Phone size={22} /></a> {/* Phone number already correct */}
           </div>
           <p className="text-sm text-[var(--text-secondary)] font-mono tracking-wide">{t.footer.copyright}</p>
         </div>
       </footer>
 
       {/* Back to Top Button */}
-      {showScrollButton && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-accent-primary text-white p-3 rounded-full shadow-lg hover:bg-opacity-80 transition-opacity duration-300 z-50"
-          aria-label="Back to top"
-        >
-          <ArrowUpCircle size={24} />
-        </button>
-      )}
+      <button
+        onClick={scrollToTop}
+        className={`back-to-top no-print ${showBackToTop ? 'visible' : ''}`}
+        aria-label="Back to top"
+      >
+        <ArrowUpCircle size={24} />
+      </button>
     </div>
   );
-};
-
-export default Portfolio;
+}
