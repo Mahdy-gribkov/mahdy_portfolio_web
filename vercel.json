@@ -4,17 +4,10 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "config": { "distDir": "dist" }
     }
   ],
-  "installCommand": "npm install --force",
-  "buildCommand": "npm run build",
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "destination": "/index.html"
-    }
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
