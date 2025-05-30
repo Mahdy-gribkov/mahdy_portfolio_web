@@ -11,10 +11,6 @@
   ],
   "installCommand": "npm install --force",
   "buildCommand": "npm run build",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html"}
-],
   "rewrites": [
     {
       "source": "/:path*",
