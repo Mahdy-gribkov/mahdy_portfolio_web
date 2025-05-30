@@ -396,7 +396,7 @@ export default function Portfolio() {
               <div className="mb-8">
                 <div className={`inline-block w-24 h-24 md:w-32 md:h-32 p-1 bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-full shadow-lg`}>
                     {/* Placeholder for photo, replace with img tag and path */}
-                    <img src="\mahdy_portfolio_web\assets\Mahdy_Gribkov_CV.pdf" alt="Mahdy Gribkov" className="w-full h-full rounded-full object-cover" />
+                    <img src="./assets/Mahdy_Gribkov_CV.pdf" alt="Mahdy Gribkov" className="w-full h-full rounded-full object-cover" />
                 </div>
               </div>
               <p className="text-lg text-[var(--accent-primary)] mb-3 font-mono">Hi, my name is</p>
