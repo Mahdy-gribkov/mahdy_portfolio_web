@@ -214,10 +214,10 @@ export default function Portfolio() {
     >
       <Helmet>
         <title>Mahdy Gribkov - Full Stack Developer</title>
-        <meta name="description" content={translations.en.hero.bio} />
+        <meta name="description" content={t.hero?.bio || translations.en.hero.bio} />
         <meta name="keywords" content="Mahdy Gribkov, Full Stack Developer, Web Developer, React, Node.js, JavaScript, TypeScript, Portfolio, Arabic, Russian, Hebrew" />
-        <meta property="og:title" content="Mahdy Gribkov - Full Stack Developer" />
-        <meta property="og:description" content={translations.en.hero.bio} />
+        <meta property="og:title" content={t.hero?.title ? `Mahdy Gribkov - ${t.hero.title}` : "Mahdy Gribkov - Full Stack Developer"} />
+<meta property="og:description" content={t.hero?.bio || translations.en.hero.bio} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://your-actual-domain.com" /> {/* Placeholder URL */}
         <meta property="og:image" content="https://your-actual-domain.com/og-image.png" /> {/* Placeholder URL */}
@@ -579,7 +579,7 @@ export default function Portfolio() {
                 </div>
                 <div>
                   <label htmlFor="message" className={`block text-sm font-medium contact-label mb-1.5 ${isRTL ? 'text-right' : 'text-left'}`}>{t.contact.form.message}</label> {/* Using custom contact-label class */}
-                  <textarea id="message" rows={4} value={formData.message} onChange={handleInputChange} required className="w-full px-4 py-2.5"></textarea>
+                  <textarea id="message" rows={4} value={formData.message} onChange={handleInputChange} required className="w-full px-4 py-2.5 rounded-md"></textarea>
                 </div>
                 <button type="submit" disabled={formStatus.submitting} className="btn-primary w-full py-3 rounded-md font-semibold flex items-center justify-center group disabled:opacity-60 disabled:cursor-not-allowed">
                   {formStatus.submitting ? 'Sending...' : t.contact.form.submit}
