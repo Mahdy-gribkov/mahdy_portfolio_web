@@ -135,7 +135,7 @@ export default function Portfolio() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [theme, setTheme] = useState('light');  // Changed from 'dark' to 'light'
 
-  const t = translations[currentLang];
+  const t = translations[currentLang] || translations.en; // Fallback to English if currentLang is undefined or missing
   const isRTL = currentLang === 'ar' || currentLang === 'he';
 
   const sectionRefs = { home: useRef(null), about: useRef(null), projects: useRef(null), skills: useRef(null), testimonials: useRef(null), contact: useRef(null) };
@@ -285,7 +285,7 @@ export default function Portfolio() {
         input, textarea { background-color: var(--input-bg); border: 1px solid var(--input-border); color: #ffffff; border-radius: 0.375rem; }
         input:focus, textarea:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent); outline: none; }
         /* Using a custom class for labels for explicit white color */
-        .contact-label { color: #ffffff; }
+        .contact-label { color: var(--text-headings); }
 
         .nav-link.active { color: var(--accent-primary); font-weight: 600; }
         .nav-link { color: var(--text-primary); } .nav-link:hover { color: var(--accent-primary); }
